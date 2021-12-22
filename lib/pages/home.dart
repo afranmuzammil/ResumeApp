@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:personaldetailsapp/pages/Detalis.dart';
 import 'package:personaldetailsapp/pages/form.dart';
 
 class Home extends StatefulWidget {
@@ -30,18 +32,50 @@ class _HomeState extends State<Home> {
       ),
       body: Center(
 
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'done:',
-            ),
-            Text(
-              '_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+        child: InkWell(
+          hoverColor: Colors.red,
+          splashColor: Colors.red,
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Details(),
+                ));
+          },
+          child: GridView.count(
+            crossAxisCount: 2 ,
+            children: List.generate(4,(index){
+              return Card(
+                child: Column(
+                  children: const [
+                    CircleAvatar(backgroundColor:Colors.lightGreen ,),
+                    Text('Full Name'),
+
+                  ],
+                ),
+                color: Colors.blue,
+              );
+            }),
+          ),
+        )
+
+        // ListView(
+        //   scrollDirection:Axis.vertical,
+        //   padding: const EdgeInsets.all(8),
+        //   children:  <Widget>[
+        //     Card(
+        //       child: ListTile(
+        //         leading: const CircleAvatar(backgroundColor:Colors.lightGreen ,),
+        //         //trailing: Icon(Icons.more_vert),
+        //         title: const Text('Full Name'),
+        //         onTap:(){},
+        //         onLongPress: (){},
+        //       ),
+        //       elevation: 10.0,
+        //     )
+        //
+        //   ],
+        // ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: ()=>{
