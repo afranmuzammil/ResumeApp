@@ -26,7 +26,7 @@ class _DetailsState extends State<Details> {
       backgroundColor: Theme.of(context).secondaryHeaderColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text('Form',
+        title: Text('Details',
             style: GoogleFonts.poppins(
                 textStyle: const TextStyle(
                     fontSize: 20,

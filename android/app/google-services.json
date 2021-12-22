@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "271539645936",
+    "project_id": "resume-app-36441",
+    "storage_bucket": "resume-app-36441.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271539645936:android:25c4b38e570c730281c135",
+        "android_client_info": {
+          "package_name": "com.afran.personaldetailsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "271539645936-ph35mc8sa758uhkm7pn5opkljic37kvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnkvB_PBqVC9fFq3SCh1hLD6lQwuyRNsw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "271539645936-ph35mc8sa758uhkm7pn5opkljic37kvq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

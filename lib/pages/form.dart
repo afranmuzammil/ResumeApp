@@ -1,4 +1,6 @@
+
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -78,6 +80,7 @@ class _FormsState extends State<Forms> {
   bool Others = false;
 
   bool uploadVisible = false;
+  bool isEnabled = true;
 
   List Gender = [];
 
@@ -374,8 +377,28 @@ class _FormsState extends State<Forms> {
                           ),
                         ),
                       ],
-                    )
-
+                    ),
+                    //
+                    //SubmitButton
+                    Builder(
+                      builder: (context) => TextButton(
+                        // color: Theme.of(context).primaryColor,
+                          style: TextButton.styleFrom(
+                            primary: Colors.black26,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            onSurface: Colors.grey,
+                          ),
+                          onPressed:(){
+                            if(formKey.currentState!.validate()){
+                                submitFunc();
+                            }
+                              },
+                          child: const Center(
+                              child: Text(
+                                'Submit',
+                                style: TextStyle(color: Colors.white70),
+                              ))),
+                    ),
                   ],
                 )
               ],
@@ -384,5 +407,48 @@ class _FormsState extends State<Forms> {
         ) ,
       ),
     );
+  }
+
+  submitFunc() {
+    setState(() {
+      try{
+        Map<String, dynamic> data ={
+          "FirstName":FirstName.text.toLowerCase().toString(),
+          "LastName":LastName.text.toLowerCase().toString(),
+          "Mobile":Mobile.text.toLowerCase().toString(),
+          "Address":Address.text.toLowerCase().toString(),
+          "Gender":Gender.toString(),
+          "ImageUrl":"xxx--xxx",
+          "ResumeUrl":"xxx--xxx",
+        };
+        FirebaseFirestore.instance
+            .collection("Personal Details")
+            .add(data);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("yay! Uploaded! Thank You:)"),
+            action: SnackBarAction(
+              label: "OK",
+              onPressed: () {
+                //Navigator.pop(context);
+              },
+            ),
+          ),
+        );
+        Navigator.pop(context, {});
+      }catch(e){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+                "we Could not upload ur data check ur internet and try again"),
+            action: SnackBarAction(
+              label: "OK",
+              onPressed: () {},
+            ),
+          ),
+        );
+        print("problam here $e");
+      }
+    });
   }
 }
