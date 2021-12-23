@@ -1,9 +1,11 @@
 
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class Forms extends StatefulWidget {
   const Forms({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class Forms extends StatefulWidget {
 class _FormsState extends State<Forms> {
   final ScrollController _controllerOne = ScrollController();
   final formKey = GlobalKey<FormState>();
+  firebase_storage.Reference ?ref;
 
   File ?userImage;
   final picker = ImagePicker();
@@ -69,15 +72,80 @@ class _FormsState extends State<Forms> {
     );
   }
 
+  firebase_storage.UploadTask? task;
+  File? file;
+
+  Future selectFile() async{
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    if(result == null) return;
+    final path = result.files.single.path;
+
+    setState(() => file = File(path!));
+  }
+  String ?fileurl ;
+  Future uploadFile() async{
+    if(file == null ) return;
+
+    final fileName = (file!.path.split("/").last);
+    final destination = 'files/$fileName';
+
+   task = FirebaseApi.uploadFile(destination,file!);
+
+   if(task == null) return;
+   final snapshot = await task!.whenComplete(() {});
+   final urlDownload = await snapshot.ref.getDownloadURL();
+   fileurl = urlDownload;
+   print("Donwload url $urlDownload");
+  }
+
+  String ?imageLink;
+  var upTime;
+
+  Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = userImage!.path;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+           Text("Image Uploading..."),
+            // CircularProgressIndicator(
+            //   valueColor: Colors.white,
+            //   backgroundColor: Colors.white,
+            //   semanticsLabel: 'Linear progress indicator',
+            // ),
+          ],
+        ),
+      ),
+    );
+    print("hello");
+    ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('uploads/${userImage!.path}');
+
+    await ref!.putFile(userImage!).whenComplete(() async {
+      ref?.getDownloadURL().then((value) {
+        imageLink = value;
+      });
+    });
+    //print(upTime);
+    return imageLink;
+  }
+
+
   //controllers
   final FirstName = TextEditingController();
   final LastName =  TextEditingController();
   final Mobile =  TextEditingController();
   final Address =  TextEditingController();
 
-  bool Male = false;
-  bool Female = false;
-  bool Others = false;
+  String ?GenderValue;
+  List GenderList=[
+    "Male",
+    "Female",
+    "Others"
+  ];
+
 
   bool uploadVisible = false;
   bool isEnabled = true;
@@ -171,75 +239,89 @@ class _FormsState extends State<Forms> {
                     const SizedBox(
                       height: 30.0,
                     ),
-                    const Text(
-                      'Gender*',
-                      style: TextStyle(
-                          fontSize: 20.0,
-                         // backgroundColor: Colors.black12
-                      ),
-                      textAlign: TextAlign.left,
+                    //Gender
+                    DropdownButton<String>(
+                      hint: const Text("Gender"),
+                      dropdownColor: Theme.of(context).secondaryHeaderColor,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 36,
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      style: const TextStyle(color: Colors.black, fontSize: 22),
+                      value: GenderValue,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          GenderValue = newValue!;
+                        });
+                      },
+                      items: GenderList.map((valueItem) {
+                        return DropdownMenuItem<String>(
+                          value: valueItem,
+                          child: Text(valueItem),
+                        );
+                      }).toList(),
                     ),
                     //male
-                    CheckboxListTile(
-                      secondary: const Icon(Icons.male_outlined),
-                      title: const Text('Male'),
-                      //subtitle: Text('Ringing after 12 hours'),
-                      value: Male,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          Male = value!;
-                        });
-                        if(Male==true){
-                          Gender.add("Male");
-                        }else if(value==false){
-                          Gender.remove("Male");
-                        }
-                      },
-                      // onChanged: (bool value) {
-                      //   setState(() {
-                      //     this.Male = value;
-                      //   });
-                      //   if (Male == true) {
-                      //     typeOfInstitutionList.add("MADRSA");
-                      //   } else if (valueMadrsa == false) {
-                      //     typeOfInstitutionList.remove("MADRSA");
-                      //   }
-                      // },
-                    ),
-                    //female
-                    CheckboxListTile(
-                      secondary: const Icon(Icons.female_outlined),
-                      title: const Text('Female'),
-                      //subtitle: Text('Ringing after 12 hours'),
-                      value: Female,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          Female = value!;
-                        });
-                        if(Female==true){
-                          Gender.add("Female");
-                        }else if(value==false){
-                          Gender.remove("Female");
-                        }
-                      },
-                    ),
-                    //others
-                    CheckboxListTile(
-                      secondary: const Icon(Icons.transgender_outlined),
-                      title: const Text('Others'),
-                      //subtitle: Text('Ringing after 12 hours'),
-                      value: Others,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          Others = value!;
-                        });
-                        if(Female==true){
-                          Gender.add("Others");
-                        }else if(value==false){
-                          Gender.remove("Others");
-                        }
-                      },
-                    ),
+                    // CheckboxListTile(
+                    //   secondary: const Icon(Icons.male_outlined),
+                    //   title: const Text('Male'),
+                    //   //subtitle: Text('Ringing after 12 hours'),
+                    //   value: Male,
+                    //   onChanged: (bool? value) {
+                    //     setState(() {
+                    //       Male = value!;
+                    //     });
+                    //     if(Male==true){
+                    //       Gender.add("Male");
+                    //     }else if(value==false){
+                    //       Gender.remove("Male");
+                    //     }
+                    //   },
+                    //   // onChanged: (bool value) {
+                    //   //   setState(() {
+                    //   //     this.Male = value;
+                    //   //   });
+                    //   //   if (Male == true) {
+                    //   //     typeOfInstitutionList.add("MADRSA");
+                    //   //   } else if (valueMadrsa == false) {
+                    //   //     typeOfInstitutionList.remove("MADRSA");
+                    //   //   }
+                    //   // },
+                    // ),
+                    // //female
+                    // CheckboxListTile(
+                    //   secondary: const Icon(Icons.female_outlined),
+                    //   title: const Text('Female'),
+                    //   //subtitle: Text('Ringing after 12 hours'),
+                    //   value: Female,
+                    //   onChanged: (bool? value) {
+                    //     setState(() {
+                    //       Female = value!;
+                    //     });
+                    //     if(Female==true){
+                    //       Gender.add("Female");
+                    //     }else if(value==false){
+                    //       Gender.remove("Female");
+                    //     }
+                    //   },
+                    // ),
+                    // //others
+                    // CheckboxListTile(
+                    //   secondary: const Icon(Icons.transgender_outlined),
+                    //   title: const Text('Others'),
+                    //   //subtitle: Text('Ringing after 12 hours'),
+                    //   value: Others,
+                    //   onChanged: (bool? value) {
+                    //     setState(() {
+                    //       Others = value!;
+                    //     });
+                    //     if(Female==true){
+                    //       Gender.add("Others");
+                    //     }else if(value==false){
+                    //       Gender.remove("Others");
+                    //     }
+                    //   },
+                    // ),
                     //Address
                     TextFormField(
                       controller: Address,
@@ -352,19 +434,18 @@ class _FormsState extends State<Forms> {
                     Column(
                       children: [
                         Center(
-                          child: userImage == null
+                          child: file == null
                               ? const Text(
                             "UPLOAD RESUME",
                             style: TextStyle(
                                 color: Colors.black54),
                           )
-                              : Image.file(userImage!),
+                              : const Text("File Uploaded"),
                         ),
                         Builder(
                           builder: (context) => TextButton.icon(
                             onPressed: () {
-                              //getImage();
-                              //_showPicker(context);
+                              selectFile();
                             },
                             icon: const Icon(
                               Icons.attach_file_outlined,
@@ -388,9 +469,43 @@ class _FormsState extends State<Forms> {
                             backgroundColor: Theme.of(context).primaryColor,
                             onSurface: Colors.grey,
                           ),
-                          onPressed:(){
+                          onPressed:()async{
                             if(formKey.currentState!.validate()){
-                                submitFunc();
+
+                                    await uploadImageToFirebase(context);
+                                    await uploadFile();
+                                    await Future.delayed(const Duration(seconds: 1));
+                                    print("upload done : $imageLink");
+                                    if (imageLink != null) {
+                                      submitFunc();
+                                      setState(() {
+                                        uploadVisible = true;
+                                      });
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text("Image Uploaded"),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              "Image Not upload try again"),
+                                        ),
+                                      );
+                                    }
+                                   // submitFunc();
+                            }
+                            else{
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      "Please enter the appropriate details"),
+                                ),
+                              );
                             }
                               },
                           child: const Center(
@@ -417,9 +532,9 @@ class _FormsState extends State<Forms> {
           "LastName":LastName.text.toLowerCase().toString(),
           "Mobile":Mobile.text.toLowerCase().toString(),
           "Address":Address.text.toLowerCase().toString(),
-          "Gender":Gender.toString(),
-          "ImageUrl":"xxx--xxx",
-          "ResumeUrl":"xxx--xxx",
+          "Gender":GenderValue.toString(),
+          "ImageUrl":imageLink,
+          "ResumeUrl":fileurl,
         };
         FirebaseFirestore.instance
             .collection("Personal Details")
@@ -452,3 +567,17 @@ class _FormsState extends State<Forms> {
     });
   }
 }
+
+class FirebaseApi {
+  static firebase_storage.UploadTask? uploadFile(String destination, File file){
+    try{
+      final ref = firebase_storage.FirebaseStorage.instance.ref(destination);
+
+      return ref.putFile(file);
+  }on FirebaseException catch(e){
+      return null;
+  }
+  }
+}
+
+

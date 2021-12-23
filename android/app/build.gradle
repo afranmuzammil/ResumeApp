@@ -46,6 +46,7 @@ android {
         applicationId "com.afran.personaldetailsapp"
         minSdkVersion 22
         targetSdkVersion 30
+        //multiDexEnaled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
