@@ -2,10 +2,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:personaldetailsapp/pages/form.dart';
 import 'package:personaldetailsapp/pages/home.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+import 'Model/data.dart';
+ late Box box;
 Future<void> main() async{
     WidgetsFlutterBinding.ensureInitialized();
-   await Firebase.initializeApp();
+
+    await Hive.initFlutter();
+    Hive.registerAdapter(DataAdapter());
+    box = await Hive.openBox<Data>("Details");
+    await Firebase.initializeApp();
   runApp(
     //MyApp()
      MaterialApp(

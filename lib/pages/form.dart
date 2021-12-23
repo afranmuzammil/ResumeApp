@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:personaldetailsapp/Model/data.dart';
+import 'package:personaldetailsapp/main.dart';
 
 class Forms extends StatefulWidget {
   const Forms({Key? key}) : super(key: key);
@@ -18,6 +22,13 @@ class _FormsState extends State<Forms> {
   final ScrollController _controllerOne = ScrollController();
   final formKey = GlobalKey<FormState>();
   firebase_storage.Reference ?ref;
+
+  @override
+  void dispose(){
+    Hive.box("Details").close();
+
+    super.dispose();
+  }
 
   File ?userImage;
   final picker = ImagePicker();
@@ -82,7 +93,7 @@ class _FormsState extends State<Forms> {
 
     setState(() => file = File(path!));
   }
-  String ?fileurl ;
+  String ?fileurls ;
   Future uploadFile() async{
     if(file == null ) return;
 
@@ -94,7 +105,7 @@ class _FormsState extends State<Forms> {
    if(task == null) return;
    final snapshot = await task!.whenComplete(() {});
    final urlDownload = await snapshot.ref.getDownloadURL();
-   fileurl = urlDownload;
+   fileurls = urlDownload;
    print("Donwload url $urlDownload");
   }
 
@@ -527,6 +538,14 @@ class _FormsState extends State<Forms> {
   submitFunc() {
     setState(() {
       try{
+        box.put(Mobile.text.toString(),Data(firstName: FirstName.text.toLowerCase().toString(),
+            lastName: LastName.text.toLowerCase().toString(),
+            gender: GenderValue.toString(),
+            mobile: Mobile.text.toLowerCase().toString(),
+            address: Address.text.toLowerCase().toString(),
+            fileUrl: fileurls.toString(),
+            imageUrl: imageLink.toString()));
+
         Map<String, dynamic> data ={
           "FirstName":FirstName.text.toLowerCase().toString(),
           "LastName":LastName.text.toLowerCase().toString(),
@@ -534,7 +553,7 @@ class _FormsState extends State<Forms> {
           "Address":Address.text.toLowerCase().toString(),
           "Gender":GenderValue.toString(),
           "ImageUrl":imageLink,
-          "ResumeUrl":fileurl,
+          "ResumeUrl":fileurls,
         };
         FirebaseFirestore.instance
             .collection("Personal Details")
@@ -565,6 +584,7 @@ class _FormsState extends State<Forms> {
         print("problam here $e");
       }
     });
+
   }
 }
 

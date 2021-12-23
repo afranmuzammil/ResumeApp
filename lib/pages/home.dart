@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:personaldetailsapp/Model/data.dart';
 import 'package:personaldetailsapp/pages/Detalis.dart';
 import 'package:personaldetailsapp/pages/form.dart';
+
+import '../main.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -36,6 +39,8 @@ class _HomeState extends State<Home> {
           hoverColor: Colors.red,
           splashColor: Colors.red,
           onTap: (){
+            Data datas = box.get("23456");
+            print("my name is ${datas.firstName} ${datas.imageUrl}");
             Navigator.push(
                 context,
                 MaterialPageRoute(
