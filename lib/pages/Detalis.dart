@@ -90,19 +90,19 @@ class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).secondaryHeaderColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.white,
         title: Text('Details',
             style: GoogleFonts.poppins(
                 textStyle: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white70))
+                    color: Colors.black54))
           // style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
-        elevation: 0,
+       // elevation: 0,
       ),
       body:  SafeArea(
         child: StreamBuilder(
@@ -144,73 +144,146 @@ class _DetailsState extends State<Details> {
                 future: _getData(),
                 builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
                   if(snapshot.hasData){
-                    return Column(
-                      children: [
-                        //image
-                        Text(
-                          "${userData["FirstName"]} ${userData["LastName"]} ",
-                          style: GoogleFonts.poppins(
-                              textStyle: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black87)),
-                        ),
-                        const SizedBox(height: 5.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "ContactNO: ${userData["Mobile"]} ",
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black87)),
-                            ),
-                            TextButton(
-                              onPressed: () => customLunch(
-                                "tel:${userData["Mobile"]}",
-                              ),
-                              child: const Text(
-                                "Call",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              style: TextButton.styleFrom(
-                                primary: Colors.black26,
-                                backgroundColor: Colors.blue,
-                                onSurface: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 5.0),
-                        Text(
-                          "Gender : ${userData["Gender"]}",
-                          style: GoogleFonts.poppins(
-                              textStyle: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black87)),
-                        ),
-                        const SizedBox(height: 5.0),
-                        Text("Address : ${userData["Address"]} ",
+                    return Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 30.0),
+                           CircleAvatar(
+                            radius: 70,
+                            backgroundColor:  Colors.black54,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(65),
+                                child: Image(
+                                    image: NetworkImage("${userData["ImageUrl"]}",),
+                                  width: 130,
+                                  height: 130,
+                                  fit: BoxFit.fill,
+                                )),
+                          ),
+                          //image
+                          const Divider(
+                            height: 40,
+                            thickness: 4,
+                            color: Colors.black54,
+                            // indent: 20,
+                            //  endIndent: 20,
+                          ),
+                          Text(
+                            "${userData["FirstName"]} ${userData["LastName"]} ".toUpperCase(),
                             style: GoogleFonts.poppins(
-                                textStyle:
-                                const TextStyle(fontSize: 16, fontWeight: FontWeight.w500))),
-                        const SizedBox(height: 5.0),
-                        //resume
-                        ElevatedButton(
-                          onPressed: () async{
-                            print(" on: ${userData["Address"]}");
-                            await openFile(
-                              url:'${userData["ResumeUrl"]}',
-                              fileName:'file.pdf',
-                            );
-                          },
-                          child:const Text("Download & Open"),
-                        )
-                      ],
+                                textStyle: const TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black54)),
+                          ),
+                          const Divider(
+                            height: 40,
+                            thickness: 4,
+                            color: Colors.black54,
+                            // indent: 10,
+                            // endIndent: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "ContactNO :    ${userData["Mobile"]} ",
+                                style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black87)),
+                              ),
+                             // const VerticalDivider(),
+                              ElevatedButton(
+                                onPressed: () => customLunch(
+                                      "tel:${userData["Mobile"]}",
+                                    ),
+                                child: const Icon(Icons.call_rounded, color: Colors.white),
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.all(8),
+                                  primary: Colors.green, // <-- Button color
+                                  onPrimary: Colors.white, // <-- Splash color
+                                ),
+                              ),
+
+                              // TextButton(
+                              //   onPressed: () => customLunch(
+                              //     "tel:${userData["Mobile"]}",
+                              //   ),
+                              //   child: const Text(
+                              //     "Call",
+                              //     style: TextStyle(color: Colors.white),
+                              //   ),
+                              //   style: TextButton.styleFrom(
+                              //     primary: Colors.black26,
+                              //     backgroundColor: Colors.black54,
+                              //     onSurface: Colors.grey,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                          const Divider(
+                            height: 20,
+                            thickness: 1,
+                            color: Colors.black54,
+                            indent: 20,
+                            endIndent: 20,
+                          ),
+                          Text(
+                            "Gender : ${userData["Gender"]}",
+                            style: GoogleFonts.poppins(
+                                textStyle: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black87)),
+                          ),
+                        const Divider(
+                          height: 20,
+                          thickness: 1,
+                          color: Colors.black54,
+                          indent: 20,
+                          endIndent: 20,
+                        ),
+                          Text("Address : ${userData["Address"]} ",
+                              style: GoogleFonts.poppins(
+                                  textStyle:
+                                  const TextStyle(fontSize: 20, fontWeight: FontWeight.w500))),
+                          const Divider(
+                            height: 20,
+                            thickness: 1,
+                            color: Colors.black54,
+                            indent: 20,
+                            endIndent: 20,
+                          ),
+                          //resume
+                          Text("Resume",
+                              style: GoogleFonts.poppins(
+                                  textStyle:
+                                  const TextStyle(fontSize: 20, fontWeight: FontWeight.w500))),
+                          const SizedBox(height: 20.0),
+                          ElevatedButton(
+                            onPressed: () async{
+                              print(" on: ${userData["Address"]}");
+                              await openFile(
+                                url:'${userData["ResumeUrl"]}',
+                                fileName:'file.pdf',
+                              );
+                            },
+                            child:const Text("DOWNLOAD & OPEN"),
+                            style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(),
+                              padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                              primary: Colors.black54, // <-- Button color
+                              onPrimary: Colors.white, // <-- Splash color
+                            ),
+                          )
+                        ],
+                      ),
                     );
                   }else if(snapshot.hasError){
                     return Center(

@@ -18,6 +18,21 @@ Future<void> main() async{
     //MyApp()
      MaterialApp(
        debugShowCheckedModeBanner: false,
+       theme: ThemeData(
+           primaryColor: Color(0xff048cbc),
+           secondaryHeaderColor: Color(0xffe7f2f7),
+           // primaryColorBrightness: ,
+           // primaryColorDark: ,
+           // primaryColorLight: ,
+           // primaryTextTheme: ,
+           backgroundColor: Colors.white,
+           // buttonColor: ,
+           // appBarTheme: ,
+           scrollbarTheme: ScrollbarThemeData(
+             thumbColor:MaterialStateProperty.all(Colors.black26),
+             // trackColor:MaterialStateProperty.all(Colors.black26),
+           )
+       ),
        initialRoute: '/',
        routes: {
          '/':(context) => const Home(),

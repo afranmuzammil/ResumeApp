@@ -37,15 +37,16 @@ class _HomeState extends State<Home> {
   }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-
+        backgroundColor: Colors.white,
         title:Text('Personal Details',
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
                 textStyle: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white70))
+                    color: Colors.black54))
           // style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           const SizedBox(
-            height: 30.0,
+            height: 3.0,
           ),
           // InkWell(
           //   onTap: (){
@@ -102,12 +103,15 @@ class _HomeState extends State<Home> {
                     );
                   }else if(gridView){
                   return GridView.count(
+                    mainAxisSpacing : 6.0,
+                    crossAxisSpacing: 6.0,
+                    childAspectRatio: 1.2,
                       crossAxisCount: 2,
                     children: snapshot.data!.docs.map((document){
                         return Card(
                           child: InkWell(
                             hoverColor: Colors.red,
-                            splashColor: Colors.red,
+                            splashColor: Colors.white10,
                             onTap: (){
                               Data datas = box.get("23456");
                               print("my name is ${datas.firstName} ${document.id}");
@@ -133,7 +137,7 @@ class _HomeState extends State<Home> {
                                             height: 10,
                                           ),
                                           Text(
-                                            'Do u Want to Delete this Post',
+                                            'Do you Want to Delete this Profile',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 18),
@@ -180,10 +184,10 @@ class _HomeState extends State<Home> {
                                           Navigator.of(context).pop();
                                           print("deleted");
                                         },
-                                        // style: TextButton.styleFrom(
-                                        //   primary: Colors.white,
-                                        //   backgroundColor: Colors.redAccent,
-                                        // ),
+                                        style: TextButton.styleFrom(
+                                          primary: Colors.black54,
+                                          backgroundColor: Colors.white,
+                                        ),
                                       ),
                                       TextButton(
                                         child: const Text('No!'),
@@ -193,7 +197,7 @@ class _HomeState extends State<Home> {
                                         },
                                         style: TextButton.styleFrom(
                                           primary: Colors.white,
-                                          backgroundColor: Colors.blue,
+                                          backgroundColor: Colors.black54,
                                         ),
                                       ),
                                     ],
@@ -201,15 +205,40 @@ class _HomeState extends State<Home> {
                                 },
                               );
                             },
-                            child:Column(
-                              children:  [
-                                CircleAvatar(backgroundImage: NetworkImage(document['ImageUrl']),),
-                                Text(document['FirstName']),
-                              ],
+                            child:Padding(
+                              padding: const EdgeInsets.all(22.0),
+                              child: Column(
+                                children:  [
+                                  CircleAvatar(
+                                    child: CircleAvatar(
+                                      backgroundImage: NetworkImage(document['ImageUrl']),
+                                      radius: 40.0,
+                                    ),
+                                    backgroundColor: Colors.black45,
+                                    radius: 42.0,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      "${document['FirstName']} ${document['LastName']}".toUpperCase(),
+                                      style: GoogleFonts
+                                          .poppins(
+                                          textStyle: const TextStyle(
+                                              fontSize: 13.0,
+                                              fontWeight:
+                                              FontWeight
+                                                  .bold,
+                                              color: Colors
+                                                  .black54)),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
 
-                          color: Colors.blue,
+                          color: document['Gender'] == "Male"?Colors.blue[100]:Colors.pink[100],
+                          elevation: 10.0,
                         );
                     }).toList() ,
                   );
@@ -344,6 +373,7 @@ class _HomeState extends State<Home> {
         // ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
         onPressed: ()=>{
         Navigator.push(
         context,
@@ -352,8 +382,9 @@ class _HomeState extends State<Home> {
         ))
         },
         tooltip: 'Add data',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        child: const Icon(Icons.add,color: Colors.black54,size: 40.0,),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
