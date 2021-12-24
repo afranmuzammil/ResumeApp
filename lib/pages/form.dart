@@ -171,6 +171,8 @@ class _FormsState extends State<Forms> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.black54,),
         backgroundColor: Colors.white,
         title: Text('Form',
             style: GoogleFonts.poppins(
@@ -211,7 +213,7 @@ class _FormsState extends State<Forms> {
                                 userImage!,
                                 width: 100,
                                 height: 100,
-                                fit: BoxFit.fitHeight,
+                                fit: BoxFit.fill,
                               ),
                             )
                                 : Container(
@@ -303,10 +305,9 @@ class _FormsState extends State<Forms> {
                         validator: (value) {
                           if (value == null ||value.isEmpty) {
                             return 'Please enter the appropriate details';
+                          } else if (value.characters.length!=10||value.characters.length<10||value.characters.length>10) {
+                            return "please enter 10 digit mobile number";
                           }
-                          // else if (value != realId) {
-                          //   return "please enter the right pass word";
-                          // }
                           return null;
                         },
                       ),
@@ -591,26 +592,37 @@ class _FormsState extends State<Forms> {
                                       await uploadFile();
                                       await Future.delayed(const Duration(seconds: 1));
                                       print("upload done : $imageLink");
-                                      if (imageLink != null) {
-                                        submitFunc();
-                                        setState(() {
-                                          uploadVisible = true;
-                                        });
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text("Image Uploaded"),
-                                          ),
-                                        );
-                                      } else {
+                                      if(GenderValue!=null){
+                                        if (imageLink != null&&fileurls!=null) {
+                                          submitFunc();
+                                          setState(() {
+                                            uploadVisible = true;
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text("Image Uploaded"),
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  "Image Not upload try again"),
+                                            ),
+                                          );
+                                        }
+                                      }else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
                                             content: Text(
-                                                "Image Not upload try again"),
+                                                "Select a gender"),
                                           ),
                                         );
                                       }
+
                                      // submitFunc();
                               }
                               else{
@@ -625,14 +637,14 @@ class _FormsState extends State<Forms> {
                                 },
                             child:  Center(
                                 child: Text(
-                                  'Submit',
+                                  'SUBMIT',
                                   style: GoogleFonts
                                       .poppins(
                                       textStyle: const TextStyle(
                                           fontSize: 13.0,
                                           fontWeight:
                                           FontWeight
-                                              .bold,
+                                              .w700,
                                           color: Colors
                                               .white70)),
                                 ))),

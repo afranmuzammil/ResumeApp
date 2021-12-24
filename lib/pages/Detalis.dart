@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:personaldetailsapp/Model/data.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../main.dart';
 
 class Details extends StatefulWidget {
   final String docID;
@@ -57,8 +60,8 @@ class _DetailsState extends State<Details> {
     return data!;
   }
   Future<DocumentSnapshot> foo(data) async{
-   // await Future.delayed(const Duration(seconds: 0)).then((value) => {userData = data});
-    userData = data;
+    await Future.delayed(const Duration(seconds: 0)).then((value) => {userData = data});
+   userData = data;
     //  var userData = await _getData();
     // print(" on: ${userData["Address"]}");
     return userData;
@@ -92,6 +95,8 @@ class _DetailsState extends State<Details> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+        color: Colors.black54,),
         backgroundColor: Colors.white,
         title: Text('Details',
             style: GoogleFonts.poppins(
@@ -143,7 +148,28 @@ class _DetailsState extends State<Details> {
               child: FutureBuilder(
                 future: _getData(),
                 builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-                  if(snapshot.hasData){
+
+                  if(snapshot.hasError){
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                            size: 60,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Text('Error: ${snapshot.error}'),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                  else if(snapshot.hasData){
+                    Data datas = box.get("${userData["Mobile"]}");
                     return Container(
                       padding: EdgeInsets.all(10.0),
                       child: Column(
@@ -156,7 +182,7 @@ class _DetailsState extends State<Details> {
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(65),
                                 child: Image(
-                                    image: NetworkImage("${userData["ImageUrl"]}",),
+                                    image: NetworkImage(datas.imageUrl,),
                                   width: 130,
                                   height: 130,
                                   fit: BoxFit.fill,
@@ -185,46 +211,47 @@ class _DetailsState extends State<Details> {
                             // indent: 10,
                             // endIndent: 10,
                           ),
+                          Text(
+                            "ContactNO ",
+                            style: GoogleFonts.poppins(
+                                textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black87)),
+                          ),
+                          const SizedBox(height: 5.0,),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                "ContactNO :    ${userData["Mobile"]} ",
-                                style: GoogleFonts.poppins(
-                                    textStyle: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black87)),
-                              ),
-                             // const VerticalDivider(),
+
                               ElevatedButton(
                                 onPressed: () => customLunch(
                                       "tel:${userData["Mobile"]}",
                                     ),
-                                child: const Icon(Icons.call_rounded, color: Colors.white),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    const Icon(Icons.call_rounded, color: Colors.white),
+                                    Text(
+                                      " ${userData["Mobile"]} ",
+                                      style: GoogleFonts.poppins(
+                                          textStyle: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white)),
+                                    ),
+                                  ],
+                                ),
                                 style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  padding: const EdgeInsets.all(8),
+                                  shape: const StadiumBorder(),
+                                  padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 12),
                                   primary: Colors.green, // <-- Button color
                                   onPrimary: Colors.white, // <-- Splash color
                                 ),
                               ),
 
-                              // TextButton(
-                              //   onPressed: () => customLunch(
-                              //     "tel:${userData["Mobile"]}",
-                              //   ),
-                              //   child: const Text(
-                              //     "Call",
-                              //     style: TextStyle(color: Colors.white),
-                              //   ),
-                              //   style: TextButton.styleFrom(
-                              //     primary: Colors.black26,
-                              //     backgroundColor: Colors.black54,
-                              //     onSurface: Colors.grey,
-                              //   ),
-                              // ),
+
                             ],
                           ),
                           const Divider(
@@ -235,11 +262,19 @@ class _DetailsState extends State<Details> {
                             endIndent: 20,
                           ),
                           Text(
-                            "Gender : ${userData["Gender"]}",
+                            "Gender ",
                             style: GoogleFonts.poppins(
                                 textStyle: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
+                                    color: Colors.black87)),
+                          ),
+                          Text(
+                            "${userData["Gender"]}",
+                            style: GoogleFonts.poppins(
+                                textStyle: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
                                     color: Colors.black87)),
                           ),
                         const Divider(
@@ -249,10 +284,14 @@ class _DetailsState extends State<Details> {
                           indent: 20,
                           endIndent: 20,
                         ),
-                          Text("Address : ${userData["Address"]} ",
+                          Text("Address  ",
                               style: GoogleFonts.poppins(
                                   textStyle:
-                                  const TextStyle(fontSize: 20, fontWeight: FontWeight.w500))),
+                                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                          Text("${userData["Address"]} ",
+                              style: GoogleFonts.poppins(
+                                  textStyle:
+                                  const TextStyle(fontSize: 15, fontWeight: FontWeight.w400))),
                           const Divider(
                             height: 20,
                             thickness: 1,
@@ -270,7 +309,7 @@ class _DetailsState extends State<Details> {
                             onPressed: () async{
                               print(" on: ${userData["Address"]}");
                               await openFile(
-                                url:'${userData["ResumeUrl"]}',
+                                url:datas.fileUrl,
                                 fileName:'file.pdf',
                               );
                             },
@@ -281,24 +320,6 @@ class _DetailsState extends State<Details> {
                               primary: Colors.black54, // <-- Button color
                               onPrimary: Colors.white, // <-- Splash color
                             ),
-                          )
-                        ],
-                      ),
-                    );
-                  }else if(snapshot.hasError){
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: 60,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16),
-                            child: Text('Error: ${snapshot.error}'),
                           )
                         ],
                       ),
