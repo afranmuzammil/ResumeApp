@@ -279,7 +279,7 @@ class _HomeState extends State<Home> {
                                             radius: 42.0,
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.all(2.0),
+                                            padding: const EdgeInsets.only(top: 2.0,),
                                             child: Text(
                                               "${document['FirstName']} ${document['LastName']}"
                                                   .toUpperCase(),
