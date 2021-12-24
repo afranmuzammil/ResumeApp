@@ -2,13 +2,31 @@
 
 Onivart task
 
-# Project Title
-
-Simple overview of use/purpose.
+# Resume App
+This App was created as a assinment from Onivart Design Studio
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+I was given few requirements for the App 
+Onivart Design Studio . 
+Task: 
+
+Create Application Collect Personal Data:
+Fill Form, name list, and detail about personal(First Name, Last Name, Mobile, Gender, Address, Image of the User it may be from Camera or from the gallery and finally his resume).
+•	There should be an empty screen(home page) and have a “+” at end of the screen.
+•	On Tap we should have a form that taking the personal information of a user (First Name, Last Name, Mobile, Gender, Address, image, and finally resume).
+•	The image of the User may be from the Camera or from the gallery both options should be shown on taping on Add Photo in a circle avatar. “The Image should store in Firebase storage but the Image URL should be saved in the HIVE local database”
+•	The resume should save in Firebase storage but the URL should be saved in the HIVE local database.
+•	The Form should be validated.
+•	On Adding the personal details to the HIVE LOCAL DATABASE with the user personal details including user image URL and resume URL.
+•	I should see the list of Users on the home page with his profile Avatar.
+•	On Tap on that, I can able to see his user details and can able to download his resume.
+•	long press on the user tail the user should as permission to delete the record from HIVE DATABASE.
+•	Automatically the profile avatar and resume doc both should also delete from the Fire Store. 
+•	 
+
+•	Similar to this application this is to give an idea.
+
 
 ## Getting Started
 
