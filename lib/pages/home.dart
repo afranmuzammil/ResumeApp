@@ -21,6 +21,7 @@ class _HomeState extends State<Home> {
 
   bool gridView = true;
 
+  //toggle b\w gridView and listView
   toggleSwitch() {
     if (gridView == true) {
       return const Icon(
@@ -36,6 +37,7 @@ class _HomeState extends State<Home> {
     }
   }
 
+//Refresh list
   Future<void> refreshList() async {
     //setButtonsVisible();
     await Future.delayed(Duration(seconds: 2));
@@ -119,6 +121,7 @@ class _HomeState extends State<Home> {
                       return RefreshIndicator(
                         color: Colors.grey,
                         onRefresh: refreshList,
+                        //Grid view of profiles
                         child: GridView.count(
                           mainAxisSpacing : 6.0,
                           crossAxisSpacing: 6.0,
@@ -156,9 +159,7 @@ class _HomeState extends State<Home> {
                                   hoverColor: Colors.red,
                                   splashColor: Colors.white10,
                                   onTap: () {
-                                    // Data datas = box.get("23456");
-                                    // print("my name is ${datas
-                                    //     .firstName} ${document.id}");
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -203,7 +204,7 @@ class _HomeState extends State<Home> {
                                                 try {
                                                   try {
                                                     box.delete(
-                                                        document["Mobile"]);
+                                                        document["Mobile"]);//delete from HIVE
                                                   } catch (e) {
                                                     print(
                                                         "from box delelte : $e");
@@ -216,7 +217,7 @@ class _HomeState extends State<Home> {
                                                       .delete()
                                                       .then((_) =>
                                                       print(
-                                                          "File deleted successfully"));
+                                                          "File deleted successfully"));//delete image form firebase
                                                   await firebase_storage
                                                       .FirebaseStorage.instance
                                                       .refFromURL(
@@ -224,7 +225,7 @@ class _HomeState extends State<Home> {
                                                       .delete()
                                                       .then((_) =>
                                                       print(
-                                                          "File deleted successfully"));
+                                                          "File deleted successfully"));//delete file from firebase
                                                   FirebaseFirestore.instance
                                                       .collection(
                                                       "Personal Details")
@@ -271,7 +272,7 @@ class _HomeState extends State<Home> {
                                           CircleAvatar(
                                             child: CircleAvatar(
                                               backgroundImage: NetworkImage(
-                                                  document['ImageUrl']),
+                                                  document['ImageUrl']),//displaying image from firebase ny getting link form HIVE
                                               radius: 40.0,
                                             ),
                                             backgroundColor: Colors.black45,
@@ -448,23 +449,7 @@ class _HomeState extends State<Home> {
           ),
 
         ],
-        // ListView(
-        //   scrollDirection:Axis.vertical,
-        //   padding: const EdgeInsets.all(8),
-        //   children:  <Widget>[
-        //     Card(
-        //       child: ListTile(
-        //         leading: const CircleAvatar(backgroundColor:Colors.lightGreen ,),
-        //         //trailing: Icon(Icons.more_vert),
-        //         title: const Text('Full Name'),
-        //         onTap:(){},
-        //         onLongPress: (){},
-        //       ),
-        //       elevation: 10.0,
-        //     )
-        //
-        //   ],
-        // ),
+
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,

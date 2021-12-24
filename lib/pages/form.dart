@@ -30,9 +30,9 @@ class _FormsState extends State<Forms> {
     super.dispose();
   }
 
-  File ?userImage;
+  File ?userImage;//imageFile
   final picker = ImagePicker();
-
+//gets image from the gallery
   Future getImage() async {
     final image = await picker.pickImage(
       source: ImageSource.gallery,
@@ -42,6 +42,7 @@ class _FormsState extends State<Forms> {
       userImage = File(image!.path);
     });
   }
+  //gets image from the camera
   Future getImageCam() async {
     final image = await picker.pickImage(
       source: ImageSource.camera,
@@ -51,7 +52,7 @@ class _FormsState extends State<Forms> {
       userImage = File(image!.path);
     });
   }
-
+//opens the BottomSheet to select camera or gallery
   void _showPicker(context) {
     showModalBottomSheet(
         context: context,
@@ -85,7 +86,7 @@ class _FormsState extends State<Forms> {
 
   firebase_storage.UploadTask? task;
   File? file;
-
+//selects the file from the phone storage
   Future selectFile() async{
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
     if(result == null) return;
@@ -94,6 +95,7 @@ class _FormsState extends State<Forms> {
     setState(() => file = File(path!));
   }
   String ?fileurls ;
+  //uploads the file to firebase
   Future uploadFile() async{
     if(file == null ) return;
 
@@ -111,20 +113,20 @@ class _FormsState extends State<Forms> {
 
   String ?imageLink;
   var upTime;
-
+//uploads the image to firebase
   Future uploadImageToFirebase(BuildContext context) async {
     String fileName = userImage!.path;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children:  const [
            Text("Image Uploading..."),
-            // CircularProgressIndicator(
-            //   valueColor: Colors.white,
-            //   backgroundColor: Colors.white,
-            //   semanticsLabel: 'Linear progress indicator',
-            // ),
+            CircularProgressIndicator(
+              //valueColor: Colors.white,
+              backgroundColor: Colors.white,
+              semanticsLabel: 'Linear progress indicator',
+            ),
           ],
         ),
       ),
@@ -342,68 +344,7 @@ class _FormsState extends State<Forms> {
                           );
                         }).toList(),
                       ),
-                      //male
-                      // CheckboxListTile(
-                      //   secondary: const Icon(Icons.male_outlined),
-                      //   title: const Text('Male'),
-                      //   //subtitle: Text('Ringing after 12 hours'),
-                      //   value: Male,
-                      //   onChanged: (bool? value) {
-                      //     setState(() {
-                      //       Male = value!;
-                      //     });
-                      //     if(Male==true){
-                      //       Gender.add("Male");
-                      //     }else if(value==false){
-                      //       Gender.remove("Male");
-                      //     }
-                      //   },
-                      //   // onChanged: (bool value) {
-                      //   //   setState(() {
-                      //   //     this.Male = value;
-                      //   //   });
-                      //   //   if (Male == true) {
-                      //   //     typeOfInstitutionList.add("MADRSA");
-                      //   //   } else if (valueMadrsa == false) {
-                      //   //     typeOfInstitutionList.remove("MADRSA");
-                      //   //   }
-                      //   // },
-                      // ),
-                      // //female
-                      // CheckboxListTile(
-                      //   secondary: const Icon(Icons.female_outlined),
-                      //   title: const Text('Female'),
-                      //   //subtitle: Text('Ringing after 12 hours'),
-                      //   value: Female,
-                      //   onChanged: (bool? value) {
-                      //     setState(() {
-                      //       Female = value!;
-                      //     });
-                      //     if(Female==true){
-                      //       Gender.add("Female");
-                      //     }else if(value==false){
-                      //       Gender.remove("Female");
-                      //     }
-                      //   },
-                      // ),
-                      // //others
-                      // CheckboxListTile(
-                      //   secondary: const Icon(Icons.transgender_outlined),
-                      //   title: const Text('Others'),
-                      //   //subtitle: Text('Ringing after 12 hours'),
-                      //   value: Others,
-                      //   onChanged: (bool? value) {
-                      //     setState(() {
-                      //       Others = value!;
-                      //     });
-                      //     if(Female==true){
-                      //       Gender.add("Others");
-                      //     }else if(value==false){
-                      //       Gender.remove("Others");
-                      //     }
-                      //   },
-                      // ),
-                      //Address
+
                       const SizedBox(
                         height: 10.0,
                       ),
@@ -441,82 +382,11 @@ class _FormsState extends State<Forms> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      // Column(
-                      //   children: [
-                      //     Center(
-                      //       child: userImage == null
-                      //           ? const Text(
-                      //         "UPLOAD PLACE IMAGE",
-                      //         style: TextStyle(
-                      //             color: Colors.black54),
-                      //       )
-                      //           : Image.file(userImage!),
-                      //     ),
-                      //     Builder(
-                      //       builder: (context) => TextButton.icon(
-                      //         onPressed: () {
-                      //           //getImage();
-                      //           _showPicker(context);
-                      //         },
-                      //         icon: const Icon(
-                      //           Icons.add_a_photo_outlined,
-                      //           color: Colors.grey,
-                      //         ),
-                      //         label: const Text(
-                      //           "Add pic*",
-                      //           style: TextStyle(color: Colors.grey),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     Visibility(
-                      //         visible: uploadVisible,
-                      //         child: const Icon(
-                      //           Icons.cloud_upload_rounded,
-                      //           color: Colors.green,
-                      //         )),
-                      //   ],
-                      // ),
+
                       const SizedBox(
                         height: 10.0,
                       ),
-                      //upload Image button
-                      // Builder(
-                      //   builder: (context) => TextButton(
-                      //     // color: Theme.of(context).primaryColor,
-                      //     style: TextButton.styleFrom(
-                      //       primary: Colors.black26,
-                      //       backgroundColor:
-                      //       Theme.of(context).primaryColor,
-                      //       onSurface: Colors.blue,
-                      //     ),
-                      //     onPressed: () async {
-                      //       await uploadImageToFirebase(context);
-                      //       await Future.delayed(Duration(seconds: 1));
-                      //       print("upload done : $imageLink");
-                      //       if (imageLink != null) {
-                      //         setState(() {
-                      //           uploadVisible = true;
-                      //         });
-                      //         ScaffoldMessenger.of(context)
-                      //             .showSnackBar(
-                      //           SnackBar(
-                      //             content: Text("Image Uploaded"),
-                      //           ),
-                      //         );
-                      //       } else {
-                      //         ScaffoldMessenger.of(context)
-                      //             .showSnackBar(
-                      //           SnackBar(
-                      //             content: Text(
-                      //                 "Image Not upload try again"),
-                      //           ),
-                      //         );
-                      //       }
-                      //     },
-                      //     child: Text('upload image',
-                      //         style: TextStyle(color: Colors.white)),
-                      //   ),
-                      // ),
+
                       const SizedBox(
                         height: 10.0,
                       ),
@@ -588,8 +458,8 @@ class _FormsState extends State<Forms> {
                             onPressed:()async{
                               if(formKey.currentState!.validate()){
 
-                                      await uploadImageToFirebase(context);
-                                      await uploadFile();
+                                      await uploadImageToFirebase(context);//upload image
+                                      await uploadFile();//upload file
                                       await Future.delayed(const Duration(seconds: 1));
                                       print("upload done : $imageLink");
                                       if(GenderValue!=null){
@@ -663,6 +533,7 @@ class _FormsState extends State<Forms> {
   submitFunc() {
     setState(() {
       try{
+        //put the data in HIVE
         box.put(Mobile.text.toString(),Data(firstName: FirstName.text.toLowerCase().toString(),
             lastName: LastName.text.toLowerCase().toString(),
             gender: GenderValue.toString(),
@@ -670,7 +541,7 @@ class _FormsState extends State<Forms> {
             address: Address.text.toLowerCase().toString(),
             fileUrl: fileurls.toString(),
             imageUrl: imageLink.toString()));
-
+        //put the data in fireBase
         Map<String, dynamic> data ={
           "FirstName":FirstName.text.toLowerCase().toString(),
           "LastName":LastName.text.toLowerCase().toString(),
@@ -712,7 +583,7 @@ class _FormsState extends State<Forms> {
 
   }
 }
-
+//firebase Api to upload the file to fireStore
 class FirebaseApi {
   static firebase_storage.UploadTask? uploadFile(String destination, File file){
     try{

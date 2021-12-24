@@ -22,7 +22,7 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
 
-  String docID;
+  String docID;//gets doc id from home page
   _DetailsState(this.docID);
 
   @override
@@ -30,24 +30,11 @@ class _DetailsState extends State<Details> {
     _getData();
     //foo();
 
-    // _ad = BannerAd(
-    //     adUnitId: AdHelper.bannerAdUnitId,
-    //     request: AdRequest(),
-    //     size: AdSize.banner,
-    //     listener: AdManagerBannerAdListener(onAdLoaded: (_) {
-    //       print("Banner AD Called");
-    //       setState(() {
-    //         isloaded = true;
-    //       });
-    //     }, onAdFailedToLoad: (_, error) {
-    //       print("Ad faild to Load with error : $error");
-    //     }));
-    //_ad.load();
-
     super.initState();
   }
-  var userData;
+  var userData; //user data as snap's is here
   DocumentSnapshot? data;
+  //gets data from firebase
   Future<DocumentSnapshot> _getData() async{
     DocumentSnapshot variable = await FirebaseFirestore.instance
         .collection("Personal Details")
@@ -59,6 +46,7 @@ class _DetailsState extends State<Details> {
     data = variable;
     return data!;
   }
+  // assigins data to "userData"
   Future<DocumentSnapshot> foo(data) async{
     await Future.delayed(const Duration(seconds: 0)).then((value) => {userData = data});
    userData = data;
@@ -77,7 +65,7 @@ class _DetailsState extends State<Details> {
 
   }
 
-
+//make direct phone call function
   Future<void> customLunch( String command) async {
     if (command !=null) {
       await launch(command);
@@ -176,6 +164,7 @@ class _DetailsState extends State<Details> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const SizedBox(height: 30.0),
+                          //image
                            CircleAvatar(
                             radius: 70,
                             backgroundColor:  Colors.black54,
@@ -188,7 +177,7 @@ class _DetailsState extends State<Details> {
                                   fit: BoxFit.fill,
                                 )),
                           ),
-                          //image
+
                           const Divider(
                             height: 40,
                             thickness: 4,
@@ -196,6 +185,7 @@ class _DetailsState extends State<Details> {
                             // indent: 20,
                             //  endIndent: 20,
                           ),
+                          //Name
                           Text(
                             "${userData["FirstName"]} ${userData["LastName"]} ".toUpperCase(),
                             style: GoogleFonts.poppins(
@@ -211,6 +201,7 @@ class _DetailsState extends State<Details> {
                             // indent: 10,
                             // endIndent: 10,
                           ),
+                          //Mobile
                           Text(
                             "ContactNO ",
                             style: GoogleFonts.poppins(
@@ -220,6 +211,7 @@ class _DetailsState extends State<Details> {
                                     color: Colors.black87)),
                           ),
                           const SizedBox(height: 5.0,),
+                          // call button
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -261,6 +253,7 @@ class _DetailsState extends State<Details> {
                             indent: 20,
                             endIndent: 20,
                           ),
+                          //gender
                           Text(
                             "Gender ",
                             style: GoogleFonts.poppins(
@@ -284,6 +277,7 @@ class _DetailsState extends State<Details> {
                           indent: 20,
                           endIndent: 20,
                         ),
+                          //address
                           Text("Address  ",
                               style: GoogleFonts.poppins(
                                   textStyle:
@@ -305,13 +299,14 @@ class _DetailsState extends State<Details> {
                                   textStyle:
                                   const TextStyle(fontSize: 20, fontWeight: FontWeight.w500))),
                           const SizedBox(height: 20.0),
+                          //resume download button
                           ElevatedButton(
                             onPressed: () async{
                               print(" on: ${userData["Address"]}");
                               await openFile(
                                 url:datas.fileUrl,
                                 fileName:'file.pdf',
-                              );
+                              );//displaying file from firebase by getting link form HIVE
                             },
                             child:const Text("DOWNLOAD & OPEN"),
                             style: ElevatedButton.styleFrom(
@@ -359,6 +354,7 @@ class _DetailsState extends State<Details> {
     );
   }
 
+  //takes the link from the Hive then send downloadFile function and opens the file
   Future openFile({required String url, String? fileName}) async {
     final file = await downloadFile(url,fileName!);
     print("from fille ${file==null}");
@@ -366,6 +362,7 @@ class _DetailsState extends State<Details> {
     print('path:${file.path}');
     OpenFile.open(file.path);
   }
+  //gets the link from openFile and downloads the file a
   Future<File?> downloadFile(String url, String name)async {
 
     final appStorage = await getApplicationDocumentsDirectory();
