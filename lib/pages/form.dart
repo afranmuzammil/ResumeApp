@@ -124,6 +124,7 @@ class _FormsState extends State<Forms> {
            Text("Image Uploading..."),
             CircularProgressIndicator(
               //valueColor: Colors.white,
+              color: Colors.black54,
               backgroundColor: Colors.white,
               semanticsLabel: 'Linear progress indicator',
             ),
