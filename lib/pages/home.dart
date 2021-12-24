@@ -263,36 +263,38 @@ class _HomeState extends State<Home> {
                                       },
                                     );
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(22.0),
-                                    child: Column(
-                                      children: [
-                                        CircleAvatar(
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                document['ImageUrl']),
-                                            radius: 40.0,
+                                  child: SingleChildScrollView(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(22.0),
+                                      child: Column(
+                                        children: [
+                                          CircleAvatar(
+                                            child: CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  document['ImageUrl']),
+                                              radius: 40.0,
+                                            ),
+                                            backgroundColor: Colors.black45,
+                                            radius: 42.0,
                                           ),
-                                          backgroundColor: Colors.black45,
-                                          radius: 42.0,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(2.0),
-                                          child: Text(
-                                            "${document['FirstName']} ${document['LastName']}"
-                                                .toUpperCase(),
-                                            style: GoogleFonts
-                                                .poppins(
-                                                textStyle: const TextStyle(
-                                                    fontSize: 13.0,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                    color: Colors
-                                                        .black54)),
+                                          Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Text(
+                                              "${document['FirstName']} ${document['LastName']}"
+                                                  .toUpperCase(),
+                                              style: GoogleFonts
+                                                  .poppins(
+                                                  textStyle: const TextStyle(
+                                                      fontSize: 13.0,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold,
+                                                      color: Colors
+                                                          .black54)),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
